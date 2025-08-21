@@ -1,16 +1,24 @@
 const express = require('express')
 const app = express()
-let { people } = require('./data')
 
+const people = require('./routes/people')
 
+// static assests
+app.use(express.static('./methods-public'))
+//parse form data
+app.use(express.urlencoded({ extended: false }))
+//parse json
+app.use(express.json())
 
+app.use('/api/people',people)
 
-app.get('/api/people',(req,res)=>{
-    res.status(200).json({success:true,data:people})
+app.post('/login',(req, res)=>{
+    const { name } = req.body
+    if(name){
+        return res.status(200).send(`welcomse ${name}`)
+    }
+    res.status(404).send('please provide credintials')
 })
-
-
-
 
 
 app.listen(8000, () =>{
